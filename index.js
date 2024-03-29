@@ -45,3 +45,51 @@ const pizzas = [
     imagen: "./img/anana.png",
   },
 ];
+
+const input = document.getElementById("pizza-id");
+const searchBtn = document.getElementById("search-btn");
+const result = document.getElementById("result");
+
+searchBtn.addEventListener("click", () => {
+  const id = input.value;
+  input.value = "";
+  result.innerHTML = "";
+
+  if (id === "") {
+    renderError("<p class='error-message'>Please enter a number.</p>");
+    return;
+  }
+
+  const pizza = pizzas.find((pizza) => pizza.id === parseInt(id));
+
+  if (!pizza) {
+    renderError("<p class='error-message'>No pizza with that ID found.</p>");
+    return;
+  }
+
+  renderPizza(pizza);
+});
+
+function renderPizza(pizza) {
+  const pizzaCard = document.createElement("div");
+  pizzaCard.classList.add("pizza-card");
+
+  const pizzaImg = document.createElement("img");
+  pizzaImg.src = pizza.imagen;
+  pizzaCard.appendChild(pizzaImg);
+
+  const pizzaInfo = document.createElement("div");
+  pizzaInfo.innerHTML = `
+    <h3>${pizza.nombre}</h3>
+    <p>Price: $${pizza.precio}</p>
+    <p>Ingredients: ${pizza.ingredientes.join(", ")}</p>
+  `;
+  pizzaCard.appendChild(pizzaInfo);
+
+  result.appendChild(pizzaCard);
+}
+
+function renderError(message) {
+  result.innerHTML = "";
+  result.appendChild(message);
+}
